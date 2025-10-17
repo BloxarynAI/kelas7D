@@ -473,6 +473,15 @@
             box-shadow: 0 6px 12px rgba(244, 67, 54, 0.4);
         }
 
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 6px 12px rgba(108, 117, 125, 0.4);
+        }
+
         /* Cards */
         .card-grid {
             display: grid;
@@ -1316,6 +1325,102 @@
             color: #721c24;
         }
 
+        /* Guest Mode Styles */
+        .guest-login-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .guest-info {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .guest-info h3 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .guest-info ul {
+            text-align: left;
+            margin-left: 20px;
+        }
+
+        .guest-info li {
+            margin-bottom: 5px;
+        }
+
+        /* Comment Styles */
+        .comment-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .comment-form {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .comment-form h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .comment-list {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .comment-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .comment-item:last-child {
+            border-bottom: none;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .comment-date {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .comment-content {
+            color: var(--text-color);
+            line-height: 1.5;
+        }
+
+        .comment-warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: #856404;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .card-grid, .album-grid {
@@ -1639,6 +1744,16 @@
                         <label for="remember-me">Ingat Saya</label>
                     </div>
                     <button class="btn" id="login-btn">Login</button>
+                    
+                    <!-- Tombol Guest Mode -->
+                    <div class="guest-login-container">
+                        <button class="btn btn-secondary" id="guest-login-btn">
+                            <i class="fas fa-eye"></i> Masuk Sebagai Pengunjung
+                        </button>
+                        <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+                            Mode pengunjung memungkinkan Anda melihat informasi tanpa login
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -2171,6 +2286,20 @@
         <!-- Pengumuman Page -->
         <section id="pengumuman" class="page">
             <h2>Pengumuman Kelas 7D</h2>
+            
+            <!-- Info Guest Mode -->
+            <div id="guest-info" class="guest-info" style="display: none;">
+                <h3><i class="fas fa-info-circle"></i> Mode Pengunjung</h3>
+                <p>Anda sedang melihat website dalam mode pengunjung. Anda dapat melihat semua informasi dan pengumuman yang tersedia.</p>
+                <ul>
+                    <li>Lihat informasi anggota kelas</li>
+                    <li>Lihat jadwal pelajaran dan piket</li>
+                    <li>Lihat album foto</li>
+                    <li>Baca pengumuman dan tugas</li>
+                </ul>
+                <p>Untuk fitur lengkap seperti komentar dan upload, silakan login dengan akun kelas.</p>
+            </div>
+            
             <div id="announcements-container">
                 <!-- Daftar pengumuman akan diisi oleh JavaScript -->
             </div>
@@ -2187,6 +2316,27 @@
                     <textarea id="announcement-content" rows="4" placeholder="Masukkan isi pengumuman"></textarea>
                 </div>
                 <button class="btn" id="publish-announcement">Publikasikan Pengumuman</button>
+            </div>
+            
+            <!-- Section Komentar -->
+            <div id="comment-section" class="comment-section" style="display: none;">
+                <div class="comment-warning">
+                    <i class="fas fa-exclamation-triangle"></i> 
+                    <strong>Perhatian:</strong> Fitur komentar masih dalam tahap uji coba dan mungkin akan dihapus pada update mendatang.
+                </div>
+                
+                <div class="comment-form">
+                    <h3>Tambah Komentar</h3>
+                    <div class="form-group">
+                        <label for="comment-text">Komentar Anda</label>
+                        <textarea id="comment-text" rows="3" placeholder="Tulis komentar Anda di sini..."></textarea>
+                    </div>
+                    <button class="btn" id="submit-comment">Kirim Komentar</button>
+                </div>
+                
+                <div class="comment-list" id="comment-list">
+                    <!-- Daftar komentar akan diisi oleh JavaScript -->
+                </div>
             </div>
         </section>
 
@@ -2626,9 +2776,13 @@
     }
 ];
 
+        // Data komentar
+        let comments = [];
+
         // State aplikasi
         let currentUser = null;
         let isLoggedIn = false;
+        let isGuestMode = false;
         let activeSessions = {};
         let currentAlbum = null;
         let currentPhotoIndex = 0;
@@ -2646,10 +2800,12 @@
         const sidebar = document.querySelector('.sidebar');
         const pages = document.querySelectorAll('.page');
         const loginBtn = document.getElementById('login-btn');
+        const guestLoginBtn = document.getElementById('guest-login-btn');
         const logoutBtn = document.getElementById('logout-btn');
         const updatePasswordBtn = document.getElementById('update-password');
         const createAccountBtn = document.getElementById('create-account');
         const publishAnnouncementBtn = document.getElementById('publish-announcement');
+        const submitCommentBtn = document.getElementById('submit-comment');
         const notification = document.getElementById('notification');
         const notificationText = document.getElementById('notification-text');
         const modalOverlay = document.getElementById('user-modal-overlay');
@@ -2672,14 +2828,18 @@
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
         const deleteAlbumsBtn = document.getElementById('delete-selected-albums');
+        const guestInfo = document.getElementById('guest-info');
+        const commentSection = document.getElementById('comment-section');
 
         // Event Listeners
         hamburger.addEventListener('click', toggleSidebar);
         loginBtn.addEventListener('click', login);
+        guestLoginBtn.addEventListener('click', enterGuestMode);
         logoutBtn.addEventListener('click', logout);
         updatePasswordBtn.addEventListener('click', updatePassword);
         createAccountBtn.addEventListener('click', createAccount);
         publishAnnouncementBtn.addEventListener('click', publishAnnouncement);
+        submitCommentBtn.addEventListener('click', submitComment);
         modalClose.addEventListener('click', closeModal);
         searchInput.addEventListener('input', filterAnggota);
         savePiketBtn.addEventListener('click', savePiket);
@@ -2738,6 +2898,9 @@
             
             // Setup event listeners
             setupEventListeners();
+            
+            // Load comments from localStorage
+            loadComments();
         });
         
         function setupDarkMode() {
@@ -2874,6 +3037,9 @@
                 renderPhotoAlbums();
             } else if (pageId === 'kelola-album') {
                 renderAlbumManagement();
+            } else if (pageId === 'pengumuman') {
+                renderAnnouncements();
+                renderComments();
             }
         }
 
@@ -2901,7 +3067,7 @@
             const userInfo = document.getElementById('user-info');
             userInfo.innerHTML = `
                 <div class="user-photo">
-                    <img src="absen${absen}.jpg" alt="${anggota.nama}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiBmaWxsPSIjNDJhNWY1Ij48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2JiZGVmYiIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGU”IGZpbGw9IiM0MmE1ZjUiPiQoYWJzZW4pPC90ZXh0Pjwvc3ZnPg=='">
+                    <img src="absen${absen}.jpg" alt="${anggota.nama}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiBmaWxsPSIjNDJhNWY1Ij48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2JiZGVmYiIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiIGZpbGw9IiM0MmE1ZjUiPiQoYWJzZW4pPC90ZXh0Pjwvc3ZnPg=='">
                 </div>
                 <div class="user-details">
                     <h2>${anggota.nama}</h2>
@@ -3011,6 +3177,39 @@
             renderAnggotaKelas(filteredAnggota);
         }
 
+        // Fungsi untuk masuk sebagai pengunjung
+        function enterGuestMode() {
+            isGuestMode = true;
+            isLoggedIn = false;
+            currentUser = null;
+            
+            // Tampilkan info guest mode
+            guestInfo.style.display = 'block';
+            
+            // Sembunyikan fitur admin dan upload
+            document.querySelectorAll('.admin-menu').forEach(menu => {
+                menu.style.display = 'none';
+            });
+            document.getElementById('add-announcement-form').style.display = 'none';
+            document.getElementById('manage-piket-form').style.display = 'none';
+            uploadTab.style.display = 'none';
+            commentSection.style.display = 'none';
+            
+            // Tampilkan hamburger menu
+            hamburger.style.display = 'flex';
+            
+            // Sembunyikan halaman login, tampilkan halaman anggota kelas
+            showPage('anggota-kelas');
+            renderAnggotaKelas();
+            renderAnnouncements();
+            renderListAnggota();
+            renderAdminList();
+            renderPiketSchedule();
+            renderPhotoAlbums();
+            
+            showNotification("Anda masuk sebagai pengunjung. Anda dapat melihat semua informasi yang tersedia.");
+        }
+
         // Fungsi login
         function login() {
             const username = document.getElementById('username').value;
@@ -3022,6 +3221,7 @@
             if (user) {
                 currentUser = user;
                 isLoggedIn = true;
+                isGuestMode = false;
                 user.isOnline = true;
                 
                 // Simpan status remember me
@@ -3046,6 +3246,12 @@
                     document.getElementById('manage-piket-form').style.display = 'none';
                     uploadTab.style.display = 'none';
                 }
+                
+                // Tampilkan fitur komentar
+                commentSection.style.display = 'block';
+                
+                // Sembunyikan info guest mode
+                guestInfo.style.display = 'none';
                 
                 // Tampilkan hamburger menu
                 hamburger.style.display = 'flex';
@@ -3081,6 +3287,7 @@
             
             currentUser = null;
             isLoggedIn = false;
+            isGuestMode = false;
             
             // Sembunyikan hamburger menu
             hamburger.style.display = 'none';
@@ -3835,6 +4042,77 @@
             }
         }
 
+        // Fungsi untuk memuat komentar dari localStorage
+        function loadComments() {
+            const savedComments = localStorage.getItem('kelas7d_comments');
+            if (savedComments) {
+                comments = JSON.parse(savedComments);
+            }
+        }
+
+        // Fungsi untuk menyimpan komentar ke localStorage
+        function saveComments() {
+            localStorage.setItem('kelas7d_comments', JSON.stringify(comments));
+        }
+
+        // Fungsi untuk merender komentar
+        function renderComments() {
+            const commentList = document.getElementById('comment-list');
+            commentList.innerHTML = '';
+            
+            if (comments.length === 0) {
+                commentList.innerHTML = '<p class="no-result">Belum ada komentar</p>';
+                return;
+            }
+            
+            comments.forEach(comment => {
+                const commentItem = document.createElement('div');
+                commentItem.className = 'comment-item';
+                commentItem.innerHTML = `
+                    <div class="comment-header">
+                        <span class="comment-author">${comment.author}</span>
+                        <span class="comment-date">${comment.date}</span>
+                    </div>
+                    <div class="comment-content">${comment.content}</div>
+                `;
+                commentList.appendChild(commentItem);
+            });
+        }
+
+        // Fungsi untuk mengirim komentar
+        function submitComment() {
+            if (!isLoggedIn || !currentUser) {
+                showNotification('Anda harus login untuk mengirim komentar!', true);
+                return;
+            }
+            
+            const commentText = document.getElementById('comment-text').value;
+            
+            if (!commentText) {
+                showNotification('Komentar tidak boleh kosong!', true);
+                return;
+            }
+            
+            const today = new Date();
+            const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')} ${String(today.getHours()).padStart(2, '0')}:${String(today.getMinutes()).padStart(2, '0')}`;
+            
+            const newComment = {
+                id: Date.now(),
+                author: currentUser.fullname,
+                content: commentText,
+                date: dateStr
+            };
+            
+            comments.unshift(newComment);
+            saveComments();
+            renderComments();
+            
+            // Reset form
+            document.getElementById('comment-text').value = '';
+            
+            showNotification('Komentar berhasil dikirim!');
+        }
+
         // Inisialisasi
         function init() {
             // Periksa apakah ada login yang diingat
@@ -3844,7 +4122,7 @@
             checkAutoLogin();
             
             // Sembunyikan hamburger menu saat halaman login
-            if (!isLoggedIn) {
+            if (!isLoggedIn && !isGuestMode) {
                 hamburger.style.display = 'none';
             }
             
@@ -3860,6 +4138,9 @@
             }
             if (!localStorage.getItem('kelas7d_albums')) {
                 localStorage.setItem('kelas7d_albums', JSON.stringify(photoAlbums));
+            }
+            if (!localStorage.getItem('kelas7d_comments')) {
+                localStorage.setItem('kelas7d_comments', JSON.stringify(comments));
             }
             
             // Render data awal

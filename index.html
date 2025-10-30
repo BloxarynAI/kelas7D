@@ -236,6 +236,7 @@
             z-index: 999;
             padding: 80px 20px 20px;
             overflow-y: auto;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .sidebar.active {
@@ -332,10 +333,16 @@
             transition: background-color 0.3s;
             font-size: 0.95rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
         }
 
         .sub-menu li:last-child {
             border-bottom: none;
+        }
+        
+        .sub-menu li:active {
+            transform: scale(0.98);
+            background-color: rgba(255, 255, 255, 0.25);
         }
 
         .sub-menu li:hover {
@@ -3081,6 +3088,11 @@
         document.querySelectorAll('.sub-menu li').forEach(link => {
             link.addEventListener('click', function() {
                 toggleSidebar();
+                setTimeout(() => {
+            if (sidebar.classList.contains('active')) {
+                toggleSidebar();
+            }
+        }, 300);
             });
         });
 
@@ -3200,6 +3212,14 @@
                 toggleNotificationPanel();
             });
             
+            document.addEventListener('click', function(e) {
+    if (sidebar.classList.contains('active') && 
+        !sidebar.contains(e.target) && 
+        !hamburger.contains(e.target)) {
+        toggleSidebar();
+    }
+});
+            
             document.getElementById('mark-all-read').addEventListener('click', function(e) {
                 e.stopPropagation();
                 markAllNotificationsAsRead();
@@ -3213,38 +3233,56 @@
         }
 
         function toggleSidebar() {
-            hamburger.classList.toggle('active');
-            sidebar.classList.toggle('active');
-            
-            if (!sidebar.classList.contains('active')) {
-                document.querySelectorAll('.accordion-item').forEach(item => {
-                    item.classList.remove('active');
-                    item.querySelector('.accordion-content').classList.remove('active');
-                });
-            }
-        }
+    hamburger.classList.toggle('active');
+    sidebar.classList.toggle('active');
+    
+    // Handle accordion state ketika sidebar ditutup
+    if (!sidebar.classList.contains('active')) {
+        document.querySelectorAll('.accordion-item').forEach(item => {
+            item.classList.remove('active');
+            item.querySelector('.accordion-content').classList.remove('active');
+        });
+    }
+    
+    // Animasi smooth untuk item menu
+    const menuItems = document.querySelectorAll('.sidebar-nav li, .accordion-item');
+    if (sidebar.classList.contains('active')) {
+        menuItems.forEach((item, index) => {
+            item.style.transitionDelay = `${index * 0.1}s`;
+        });
+    } else {
+        menuItems.forEach(item => {
+            item.style.transitionDelay = '0s';
+        });
+    }
+}
 
-        function showPage(pageId) {
-            pages.forEach(page => {
-                page.classList.remove('active');
-            });
-            document.getElementById(pageId).classList.add('active');
-            
-            if (pageId === 'jadwal-piket') {
-                renderPiketSchedule();
-            } else if (pageId === 'album-foto') {
-                renderPhotoAlbums();
-            } else if (pageId === 'kelola-album') {
-                renderAlbumManagement();
-            } else if (pageId === 'pengumuman') {
-                renderAnnouncements();
-                renderComments();
-            }
-            
-            if (window.innerWidth < 768) {
+function showPage(pageId) {
+    pages.forEach(page => {
+        page.classList.remove('active');
+    });
+    document.getElementById(pageId).classList.add('active');
+    
+    if (pageId === 'jadwal-piket') {
+        renderPiketSchedule();
+    } else if (pageId === 'album-foto') {
+        renderPhotoAlbums();
+    } else if (pageId === 'kelola-album') {
+        renderAlbumManagement();
+    } else if (pageId === 'pengumuman') {
+        renderAnnouncements();
+        renderComments();
+    }
+    
+    // Auto-close sidebar di mobile setelah pindah halaman
+    if (window.innerWidth < 768 && sidebar.classList.contains('active')) {
+        setTimeout(() => {
+            if (sidebar.classList.contains('active')) {
                 toggleSidebar();
             }
-        }
+        }, 200);
+    }
+}
 
         function showNotification(message, isError = false) {
             notificationText.textContent = message;
